@@ -59,5 +59,19 @@ services:
       - "1025:1025"
       - "8025:8025"
 
+  participation-app:
+    build: ./participation-app
+    container_name: facoffee-participation
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+    ports:
+      - "3002:3002"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+
 volumes:
   keycloak_data:

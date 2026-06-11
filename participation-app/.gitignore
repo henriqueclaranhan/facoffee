@@ -152,3 +152,4 @@ cython_debug/
 *.sqlite
 *.sqlite3
 facoffee_participation.db
+.python-version

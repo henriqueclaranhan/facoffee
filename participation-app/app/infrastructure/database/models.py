@@ -15,3 +15,22 @@ class QuotaModel(Base):
     created_by = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, nullable=True)
+
+class ParticipationModel(Base):
+    __tablename__ = "participations"
+
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, nullable=False, index=True)
+    quota_id = Column(String, nullable=False, index=True)
+    status = Column(String, nullable=False)
+    joined_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    cancelled_at = Column(DateTime, nullable=True)
+
+class OutboxEventModel(Base):
+    __tablename__ = "outbox_events"
+
+    id = Column(String, primary_key=True, index=True)
+    event_type = Column(String, nullable=False)
+    payload = Column(String, nullable=False)
+    status = Column(String, nullable=False, default="PENDING")
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)

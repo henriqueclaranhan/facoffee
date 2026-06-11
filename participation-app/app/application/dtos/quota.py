@@ -11,6 +11,13 @@ class CreateParticipationQuotaRequest(BaseModel):
     amount: float = Field(..., ge=0, description="Valor definido pelo gestor. O serviço não calcula este valor automaticamente.")
     active: bool = Field(True)
 
+class UpdateParticipationQuotaRequest(BaseModel):
+    name: Optional[str] = Field(None, min_length=3)
+    description: Optional[str] = Field(None)
+    condition: Optional[QuotaCondition] = None
+    items: Optional[QuotaItems] = None
+    amount: Optional[float] = Field(None, ge=0)
+
 class ParticipationQuotaResponse(BaseModel):
     id: str = Field(..., examples=["quota_001"])
     name: str = Field(..., examples=["Cota diária completa"])
