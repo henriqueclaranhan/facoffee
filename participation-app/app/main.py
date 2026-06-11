@@ -9,6 +9,11 @@ from app.presentation.api.participation import router as participation_router
 from app.domain.exceptions.quota import InvalidQuotaDataException, QuotaNotFoundException, QuotaConflictException
 from app.domain.exceptions.participation import InvalidParticipationDataException, ParticipationNotFoundException, ParticipationConflictException
 
+from app.infrastructure.messaging.consumer import run_consumer_in_background
+import logging
+
+logging.basicConfig(level=logging.INFO)
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
@@ -19,6 +24,10 @@ app = FastAPI(
 
 from fastapi.exceptions import RequestValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
+
+@app.on_event("startup")
+def startup_event():
+    run_consumer_in_background()
 
 @app.exception_handler(InvalidQuotaDataException)
 async def domain_exception_handler(request: Request, exc: InvalidQuotaDataException):
