@@ -3,9 +3,11 @@ from fastapi.responses import JSONResponse
 from datetime import datetime
 
 from app.infrastructure.database.database import engine, Base
-from app.infrastructure.database.models import QuotaModel
+from app.infrastructure.database.models import QuotaModel, ParticipationModel
 from app.presentation.api.quota import router as quota_router
-from app.domain.exceptions.quota import InvalidQuotaDataException
+from app.presentation.api.participation import router as participation_router
+from app.domain.exceptions.quota import InvalidQuotaDataException, QuotaNotFoundException, QuotaConflictException
+from app.domain.exceptions.participation import InvalidParticipationDataException, ParticipationNotFoundException, ParticipationConflictException
 
 Base.metadata.create_all(bind=engine)
 
@@ -26,6 +28,71 @@ async def domain_exception_handler(request: Request, exc: InvalidQuotaDataExcept
             "timestamp": datetime.utcnow().isoformat() + "Z",
             "status": status.HTTP_400_BAD_REQUEST,
             "error": "Bad Request",
+            "message": str(exc),
+            "path": request.url.path
+        }
+    )
+
+@app.exception_handler(QuotaNotFoundException)
+async def not_found_exception_handler(request: Request, exc: QuotaNotFoundException):
+    return JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "status": status.HTTP_404_NOT_FOUND,
+            "error": "Not Found",
+            "message": str(exc),
+            "path": request.url.path
+        }
+    )
+
+@app.exception_handler(QuotaConflictException)
+async def conflict_exception_handler(request: Request, exc: QuotaConflictException):
+    return JSONResponse(
+        status_code=status.HTTP_409_CONFLICT,
+        content={
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "status": status.HTTP_409_CONFLICT,
+            "error": "Conflict",
+            "message": str(exc),
+            "path": request.url.path
+        }
+    )
+
+@app.exception_handler(InvalidParticipationDataException)
+async def invalid_participation_exception_handler(request: Request, exc: InvalidParticipationDataException):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content={
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "status": status.HTTP_400_BAD_REQUEST,
+            "error": "Bad Request",
+            "message": str(exc),
+            "path": request.url.path
+        }
+    )
+
+@app.exception_handler(ParticipationNotFoundException)
+async def part_not_found_exception_handler(request: Request, exc: ParticipationNotFoundException):
+    return JSONResponse(
+        status_code=status.HTTP_404_NOT_FOUND,
+        content={
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "status": status.HTTP_404_NOT_FOUND,
+            "error": "Not Found",
+            "message": str(exc),
+            "path": request.url.path
+        }
+    )
+
+@app.exception_handler(ParticipationConflictException)
+async def part_conflict_exception_handler(request: Request, exc: ParticipationConflictException):
+    return JSONResponse(
+        status_code=status.HTTP_409_CONFLICT,
+        content={
+            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "status": status.HTTP_409_CONFLICT,
+            "error": "Conflict",
             "message": str(exc),
             "path": request.url.path
         }
@@ -76,6 +143,7 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
 app.include_router(quota_router)
+app.include_router(participation_router)
 
 @app.get("/health", tags=["Health"])
 @app.get("/api/participation/health", tags=["Health"])

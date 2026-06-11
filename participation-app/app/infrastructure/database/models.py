@@ -15,3 +15,16 @@ class QuotaModel(Base):
     created_by = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     updated_at = Column(DateTime, nullable=True)
+
+class ParticipationModel(Base):
+    __tablename__ = "participations"
+
+    id = Column(String, primary_key=True, index=True)
+    user_id = Column(String, nullable=False, index=True)
+    quota_id = Column(String, nullable=False, index=True)
+    start_cycle = Column(String, nullable=False)
+    status = Column(String, nullable=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    quota_snapshot = Column(String, nullable=False)
+    effective_cycle = Column(String, nullable=True)
+    updated_at = Column(DateTime, nullable=True)
