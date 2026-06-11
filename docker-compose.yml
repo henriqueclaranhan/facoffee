@@ -8,7 +8,7 @@ services:
       - "8000:8000"
     environment:
       USERS_UPSTREAM: host.docker.internal:3001
-      PARTICIPATION_UPSTREAM: host.docker.internal:3002
+      PARTICIPATION_UPSTREAM: participation-app:3002
       FINANCE_UPSTREAM: host.docker.internal:3003
     volumes:
       - ./nginx/default.conf.template:/etc/nginx/templates/default.conf.template:ro
@@ -58,6 +58,24 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+
+  participation-app:
+    build:
+      context: ./participation-app
+      dockerfile: Dockerfile
+    container_name: facoffee-participation
+    hostname: participation-app
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=sqlite:////code/data/facoffee_participation.db
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./participation-app/data:/code/data
+    depends_on:
+      - rabbitmq
+      - keycloak
+
 
 volumes:
   keycloak_data:
