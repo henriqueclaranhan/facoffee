@@ -31,11 +31,11 @@ def get_authenticated_user(credentials: HTTPAuthorizationCredentials) -> Authent
     try:
         payload = jwt.decode(token, options={"verify_signature": False})
         
-        user_id = payload.get("sub")
+        user_id = payload.get("sub") or payload.get("preferred_username") or payload.get("email")
         if not user_id:
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Token inválido: identificador do usuário (sub) ausente."
+                detail="Token inválido: identificador do usuário ausente."
             )
             
         email = payload.get("email")
