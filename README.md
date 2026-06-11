@@ -182,7 +182,8 @@ curl -X POST "http://localhost:8080/realms/facoffee/protocol/openid-connect/toke
   -H "Content-Type: application/x-www-form-urlencoded" \
   -d "grant_type=client_credentials" \
   -d "client_id=facoffee-private" \
-  -d "client_secret=facoffee-private-secret"
+  -d "client_secret=facoffee-private-secret" \
+  -d "scope=openid"
 ```
 
 Exemplo para obter token com o client público (usuário do realm):
@@ -193,7 +194,8 @@ curl -X POST "http://localhost:8080/realms/facoffee/protocol/openid-connect/toke
   -d "grant_type=password" \
   -d "client_id=facoffee-public" \
   -d "username=facoffee@facom.ufms.br" \
-  -d "password=facoffee"
+  -d "password=facoffee" \
+  -d "scope=openid"
 ```
 
 Com o token em mãos, use no cabeçalho:
