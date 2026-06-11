@@ -47,3 +47,10 @@ class PageMetadataResponse(BaseModel):
 class ParticipationQuotaPageResponse(BaseModel):
     items: List[ParticipationQuotaResponse]
     page: PageMetadataResponse
+
+class UpdateParticipationQuotaRequest(BaseModel):
+    description: Optional[str] = None
+    condition: Optional[QuotaCondition] = None
+    items: Optional[QuotaItems] = None
+    amount: Optional[float] = Field(None, ge=0)
+    active: Optional[bool] = None

@@ -8,7 +8,7 @@ class QuotaRepository(ABC):
         pass
 
     @abstractmethod
-    def find_all(self, offset: int, limit: int) -> Tuple[List[ParticipationQuota], int]:
+    def find_all(self, offset: int, limit: int, active: Optional[bool] = None, condition: Optional[str] = None, items: Optional[str] = None) -> Tuple[List[ParticipationQuota], int]:
         pass
 
     @abstractmethod

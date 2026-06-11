@@ -62,8 +62,16 @@ class SQLAlchemyQuotaRepository(QuotaRepository):
         self.db.refresh(db_model)
         return self._to_domain(db_model)
 
-    def find_all(self, offset: int, limit: int) -> Tuple[List[ParticipationQuota], int]:
+    def find_all(self, offset: int, limit: int, active: Optional[bool] = None, condition: Optional[str] = None, items: Optional[str] = None) -> Tuple[List[ParticipationQuota], int]:
         query = self.db.query(QuotaModel)
+        if active is not None:
+            status_val = "ACTIVE" if active else "INACTIVE"
+            query = query.filter(QuotaModel.status == status_val)
+        if condition:
+            query = query.filter(QuotaModel.condition == condition)
+        if items:
+            query = query.filter(QuotaModel.items == items)
+            
         total_elements = query.count()
         models = query.offset(offset).limit(limit).all()
         return [self._to_domain(m) for m in models], total_elements

@@ -3,3 +3,9 @@ class DomainException(Exception):
 
 class InvalidQuotaDataException(DomainException):
     pass
+
+class QuotaNotFoundException(DomainException):
+    pass
+
+class QuotaConflictException(DomainException):
+    pass
