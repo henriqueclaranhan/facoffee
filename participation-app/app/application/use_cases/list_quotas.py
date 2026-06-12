@@ -1,4 +1,5 @@
 import math
+from typing import Optional
 from app.domain.repositories.quota_repository import QuotaRepository
 from app.application.dtos.quota import (
     ParticipationQuotaPageResponse,
